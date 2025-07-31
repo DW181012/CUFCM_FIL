@@ -5,17 +5,29 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import os
 import re
+import matplotlib.font_manager as fm
 
-mpl.rcParams['mathtext.fontset'] = 'stix'
-mpl.rcParams['mathtext.rm'] = 'Bitstream Vera Sans'
-mpl.rcParams['mathtext.it'] = 'Bitstream Vera Sans:italic'
-mpl.rcParams['mathtext.bf'] = 'Bitstream Vera Sans:bold'
-
-plt.rcParams.update({'font.size': 16})
+# Path to the directory where fonts are stored
+font_dir = os.path.expanduser("~/.local/share/fonts/cmu/cm-unicode-0.7.0")
+# Choose the TTF or OTF version of CMU Serif Regular
+font_path = os.path.join(font_dir, 'cmunrm.ttf')  # Or 'cmunrm.otf' if you prefer OTF
+# Load the font into Matplotlib's font manager
+prop = fm.FontProperties(fname=font_path)
+# Register each font file with Matplotlib's font manager
+for font_file in os.listdir(font_dir):
+    if font_file.endswith('.otf'):
+        fm.fontManager.addfont(os.path.join(font_dir, font_file))
+# Set the global font family to 'serif' and specify CMU Serif
+plt.rcParams['font.family'] = 'serif'
+plt.rcParams['font.serif'] = ['CMU Serif']
+plt.rcParams['mathtext.fontset'] = 'cm'  # Use 'cm' for Computer Modern
+plt.rcParams.update({'font.size': 24})
 
 cmap_name = 'coolwarm'
 
 path = "data/giant_swimmer/combined_analysis_force_rerun/"
+
+path = "data/for_paper/giant_swimmer_rerun/20250516_force/"
 
 
 # keywords = ['time_array_index', 'wavenumber_array_index', 'body_speed_array_index']
@@ -68,8 +80,6 @@ ax4 = fig4.add_subplot(1,1,1)
 
 ax3 = ax.twinx()  
 
-# print(arrays['wavenumber_array_index'])
-
 
 for si in indices:
     nfil = filnumbers[si]
@@ -93,10 +103,11 @@ avg_wavenumbers = avg_wavenumbers[sorted_indices]
 avg_body_speed = avg_body_speed[sorted_indices]
 avg_dissipation = avg_dissipation[sorted_indices]
 
+print(avg_wavenumbers)
 
 ax.plot(RoL, avg_body_speed, color='black', marker='+')
 ax2.plot(RoL, avg_wavenumbers, color='black', marker='+')
-ax3.plot(RoL, avg_dissipation, color='blue', marker='+')
+ax3.plot(RoL, avg_dissipation/1e4, color='black', marker='+', linestyle='dashed')
 ax4.plot(RoL, cilia_array_length/avg_wavenumbers/L, color='black', marker='+')
 
 
@@ -107,20 +118,26 @@ from matplotlib.cm import ScalarMappable
 ax.set_xlabel(r'$R/L$')
 ax.set_ylabel(r'$<V>T/L$')  
 ax.set_ylim(0.0, 0.2)
-# ax.set_xlim(0, 0.06)
-# ax.legend()
+
+speed_line = ax.plot([None], [None], c='black', marker='+', linestyle='solid')[0]
+dissipation_line = ax.plot([None], [None], c='black', marker='+', linestyle='dashed')[0]
+ax.legend([speed_line, dissipation_line], ['Speed', 'Dissipation'], fontsize=16, frameon=False, loc='upper left')
 
 ax2.set_xlabel(r'$R/L$')
 ax2.set_ylabel(r'$Wavenumber$')
 
+ax3.annotate(r'$\times 10^{4}$', 
+             xy=(1, 1), xycoords='axes fraction', 
+             fontsize=20, ha='left', va='bottom', color='black')
+
 
 ax3.set_xlabel(r'$R/L$')
-ax3.set_ylabel(r'$<\mathcal{R}>T^2/\mu L^3$', color='blue')
-ax3.tick_params(axis="y", labelcolor='blue')
+ax3.set_ylabel(r'$<\mathcal{R}>T^2/\mu L^3$', color='black')
+ax3.tick_params(axis="y", labelcolor='black')
 
 ax4.set_xlabel(r'$R/L$')
 ax4.set_ylabel(r'$\lambda/L$')
-ax4.set_ylim(23, 60)
+ax4.set_ylim(23, 70)
 
 # ax3.set_xlabel(r'tilt angle')
 # ax3.set_ylabel(variable_label)  

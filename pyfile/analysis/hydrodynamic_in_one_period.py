@@ -4,43 +4,69 @@ import os
 import sys
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
+import matplotlib.ticker as mticker
 
-mpl.rcParams['mathtext.fontset'] = 'stix'
-mpl.rcParams['mathtext.rm'] = 'Bitstream Vera Sans'
-mpl.rcParams['mathtext.it'] = 'Bitstream Vera Sans:italic'
-mpl.rcParams['mathtext.bf'] = 'Bitstream Vera Sans:bold'
-
-plt.rcParams.update({'font.size': 16})
+# Path to the directory where fonts are stored
+font_dir = os.path.expanduser("~/.local/share/fonts/cmu/cm-unicode-0.7.0")
+# Choose the TTF or OTF version of CMU Serif Regular
+font_path = os.path.join(font_dir, 'cmunrm.ttf')  # Or 'cmunrm.otf' if you prefer OTF
+# Load the font into Matplotlib's font manager
+prop = fm.FontProperties(fname=font_path)
+# Register each font file with Matplotlib's font manager
+for font_file in os.listdir(font_dir):
+    if font_file.endswith('.otf'):
+        fm.fontManager.addfont(os.path.join(font_dir, font_file))
+# Set the global font family to 'serif' and specify CMU Serif
+plt.rcParams['font.family'] = 'serif'
+plt.rcParams['font.serif'] = ['CMU Serif']
+plt.rcParams['mathtext.fontset'] = 'cm'  # Use 'cm' for Computer Modern
+plt.rcParams.update({'font.size': 24})
 
 cmap_name = 'coolwarm'
 
-path = "data/ic_hpc_sim_free/20240311_1/"
-path = "data/ic_hpc_sim_free_with_force/20240311_1/"
+# path = "data/ic_hpc_sim_free_with_force/20240311_1/"
+# index = 1 # symplectic
+# index2 = 0 # diaplectic
 
-indices = [0, 1]
+path1 = "data/for_paper/hydrodynamics_in_one_period/20250302/"
+path2 = "data/for_paper/hydrodynamics_in_one_period/20250302/"
+index1 = 0 # symplectic
+index2 = 1 # diaplectic
+force = True
 
-index = 1
-index2 = 0
+path1 = "data/for_paper/flowfield_example/20250522_flowfield_free/"
+path2 = "data/for_paper/flowfield_example/20250522_flowfield_free/"
+index1 = 0 # symplectic
+index2 = 1 # diaplectic
 force = True
 
 
-r_data = np.load(f"{path}r_array_index{index}.npy")
-time_data = np.load(f"{path}time_array_index{index}.npy")
-body_speed_data = np.load(f"{path}body_speed_array_index{index}.npy")
-body_rot_speed_data = np.load(f"{path}body_rot_speed_array_index{index}.npy")
-num_eff_beat_data = np.load(f"{path}num_eff_beat_array_index{index}.npy")
+r_data = np.load(f"{path1}r_array_index{index1}.npy")
+time_data = np.load(f"{path1}time_array_index{index1}.npy")
+body_speed_data = np.load(f"{path1}body_speed_array_index{index1}.npy")
+body_rot_speed_data = np.load(f"{path1}body_rot_speed_array_index{index1}.npy")
+num_eff_beat_data = np.load(f"{path1}num_eff_beat_array_index{index1}.npy")
 if force:
-    dissipation_data = np.load(f"{path}dissipation_array_index{index}.npy")
-    efficiency_data = np.load(f"{path}efficiency_array_index{index}.npy")
+    dissipation_data = np.load(f"{path1}dissipation_array_index{index1}.npy")
+    efficiency_data = np.load(f"{path1}efficiency_array_index{index1}.npy")
+try:
+    squirmer_speed_data = np.load(f"{path1}squirmer_speed_array_index{index1}.npy")
+except:
+    pass
 
-r_data2 = np.load(f"{path}r_array_index{index2}.npy")
-time_data2 = np.load(f"{path}time_array_index{index2}.npy")
-body_speed_data2 = np.load(f"{path}body_speed_array_index{index2}.npy")
-body_rot_speed_data2 = np.load(f"{path}body_rot_speed_array_index{index2}.npy")
-num_eff_beat_data2 = np.load(f"{path}num_eff_beat_array_index{index2}.npy")
+r_data2 = np.load(f"{path2}r_array_index{index2}.npy")
+time_data2 = np.load(f"{path2}time_array_index{index2}.npy")
+body_speed_data2 = np.load(f"{path2}body_speed_array_index{index2}.npy")
+body_rot_speed_data2 = np.load(f"{path2}body_rot_speed_array_index{index2}.npy")
+num_eff_beat_data2 = np.load(f"{path2}num_eff_beat_array_index{index2}.npy")
 if force:
-    dissipation_data2 = np.load(f"{path}dissipation_array_index{index2}.npy")
-    efficiency_data2 = np.load(f"{path}efficiency_array_index{index2}.npy")
+    dissipation_data2 = np.load(f"{path2}dissipation_array_index{index2}.npy")
+    efficiency_data2 = np.load(f"{path2}efficiency_array_index{index2}.npy")
+try:
+    squirmer_speed_data2 = np.load(f"{path2}squirmer_speed_array_index{index2}.npy")
+except:
+    pass
 
 num_frame = len(time_data)
 
@@ -49,6 +75,7 @@ time_data = np.linspace(0, 1+1./num_frame, num_frame)
 # n_folder_heldfixed = r_data_heldfixed.shape[0]
 n_folder = r_data.shape[0]
 
+figsize=(6,6)
 fig1 = plt.figure()
 ax1 = fig1.add_subplot(1,1,1)
 ax12 = ax1.twinx()
@@ -75,8 +102,8 @@ ax6 = fig6.add_subplot(1,1,1)
 #     indices_diaplectic = np.where((plot_y  < .4) & (plot_y > 0.04))[0]
 #     indices_diaplectic_k2 = np.where(plot_y  < 0.04)[0]
 
-#     ax.scatter(plot_x[indices_symplectic], plot_y[indices_symplectic], s=100, marker='x', c='r')
-#     ax.scatter(plot_x[indices_diaplectic], plot_y[indices_diaplectic], s=100, marker='+', c='r')
+#     ax.scatter(plot_x[indices_symplectic], plot_y[indices_symplectic], s=100, marker=dia_marker, c='r')
+#     ax.scatter(plot_x[indices_diaplectic], plot_y[indices_diaplectic], s=100, marker=sym_marker, c='r')
 #     ax.scatter(plot_x[indices_diaplectic_k2], plot_y[indices_diaplectic_k2], s=100, marker='P', c='r')
 
 
@@ -94,25 +121,43 @@ ax6 = fig6.add_subplot(1,1,1)
 # vmax2 = np.max(variable)
 # color2 = cmap((variable-vmin2)/(vmax2-vmin2))
 
+sym_marker = None
+dia_marker = None
 
-ax1.plot(time_data[:-1], r_data[:-1], marker='+', c='black')
-ax12.plot(time_data[:-1], r_data2[:-1], marker='x', c='blue')
 
-ax2.plot(time_data[:-1], num_eff_beat_data[:-1], marker='+', c='black', label='Symplectic')
-ax2.plot(time_data[:-1], num_eff_beat_data2[:-1], marker='x', c='blue', label='Diaplectic')
+ax1.plot(time_data[:-1], r_data[:-1], marker=sym_marker, c='black')
+ax12.plot(time_data[:-1], r_data2[:-1], marker=dia_marker, c='blue')
 
-ax3.plot(time_data[:-1], body_speed_data[:num_frame-1], marker='+', c='black', label='Symplectic')
-ax3.plot(time_data[:-1], body_speed_data2[:num_frame-1], marker='x', c='blue', label='Diaplectic')
+ax2.plot(time_data[:-1], num_eff_beat_data[:-1], marker=sym_marker, c='black', label='Symplectic')
+ax2.plot(time_data[:-1], num_eff_beat_data2[:-1], marker=dia_marker, c='blue', label='Diaplectic')
 
-ax4.plot(time_data[:-1], body_rot_speed_data[:num_frame-1], marker='+', c='black', label='Symplectic')
-ax4.plot(time_data[:-1], body_rot_speed_data2[:num_frame-1], marker='x', c='blue', label='Diaplectic')
+# Plot the lines
+line_sym = ax3.plot(time_data[:-1], body_speed_data[:num_frame-1], marker=sym_marker, c='black', label='Symplectic')[0]
+line_dia = ax3.plot(time_data[:-1], body_speed_data2[:num_frame-1], marker=dia_marker, c='blue', label='Diaplectic')[0]
+try:
+    ax3.scatter(time_data[0:-1:10], squirmer_speed_data[:num_frame-1:10]/49.4, marker="^", c='black')
+    ax3.scatter(time_data[0:-1:10], squirmer_speed_data2[:num_frame-1:10]/49.4, marker="^", c='blue')
+
+    squirmer_legend1 = ax3.scatter([], [], marker='^', c='black')
+    squirmer_legend2 = ax3.scatter([], [], marker='^', c='blue')
+    from matplotlib.legend_handler import HandlerTuple
+    ax3.legend([line_sym, line_dia, (squirmer_legend1, squirmer_legend2)],
+               [ 'Symplectic', 'Diaplectic', 'Squirmer',],
+               fontsize=16, frameon=False,
+               handler_map={tuple: HandlerTuple(ndivide=None)})
+except:
+    ax3.legend(fontsize=16, frameon=False)
+
+
+ax4.plot(time_data[:-1], body_rot_speed_data[:num_frame-1], marker=sym_marker, c='black', label='Symplectic')
+ax4.plot(time_data[:-1], body_rot_speed_data2[:num_frame-1], marker=dia_marker, c='blue', label='Diaplectic')
 
 if force:
-    ax5.plot(time_data[:-1], dissipation_data[:num_frame-1], marker='+', c='black', label='Symplectic')
-    ax5.plot(time_data[:-1], dissipation_data2[:num_frame-1], marker='x', c='blue', label='Diaplectic')
+    ax5.plot(time_data[:-1], dissipation_data[:num_frame-1], marker=sym_marker, c='black', label='Symplectic')
+    ax5.plot(time_data[:-1], dissipation_data2[:num_frame-1], marker=dia_marker, c='blue', label='Diaplectic')
 
-    ax6.plot(time_data[:-1], efficiency_data[:num_frame-1], marker='+', c='black', label='Symplectic')
-    ax6.plot(time_data[:-1], efficiency_data2[:num_frame-1], marker='x', c='blue', label='Diaplectic')
+    ax6.plot(time_data[:-1], efficiency_data[:num_frame-1], marker=sym_marker, c='black', label='Symplectic')
+    ax6.plot(time_data[:-1], efficiency_data2[:num_frame-1], marker=dia_marker, c='blue', label='Diaplectic')
 
 
 # ax3.scatter(tilt_data[fi][:][indices_meridional], variable[:][indices_meridional], color = 'r', label=r'$<r>$>0.4')
@@ -131,45 +176,59 @@ from matplotlib.cm import ScalarMappable
 # cbar.set_label(variable_label)   
 
 # legend
-# ax.scatter(-1, -1, marker='x', c='black', s=100, label='Symplectic')
-# ax.scatter(-1, -1, marker='+', c='black', s=100, label='Diaplectic')
+# ax.scatter(-1, -1, marker=dia_marker, c='black', s=100, label='Symplectic')
+# ax.scatter(-1, -1, marker=sym_marker, c='black', s=100, label='Diaplectic')
 # ax.scatter(-1, -1, marker='P', c='black', s=100, label='Diaplectic(#k=2)')
 # ax.scatter(-1, -1, marker='s', c='r', s=100, label='Held fixed')
 # ax.scatter(-1, -1, marker='s', c='b', s=100, label='Free')
 
 ax1.set_xlabel(r'$t/T$')
 ax1.set_ylabel(r'r')
-ax1.plot(-1, -1, marker='+', c='black', label='Symplectic')
-ax1.plot(-1, -1, marker='x', c='blue', label='Diaplectic')
-ax1.legend(loc='upper left')
+ax1.plot(-1, -1, marker=sym_marker, c='black', label='Symplectic')
+ax1.plot(-1, -1, marker=dia_marker, c='blue', label='Diaplectic')
+ax1.legend(loc='upper left', fontsize=16, frameon=False)
 ax1.set_xlim((0, 1))
 ax1.set_ylim((0, 1))
+ax1.set_box_aspect(1) 
 
 ax2.set_xlabel(r'$t/T$')
 ax2.set_ylabel(r'No. of effective strokes')
-ax2.legend()
+ax2.legend(fontsize=16, frameon=False)
 ax2.set_xlim((0, 1))
+ax2.set_box_aspect(1) 
 
 ax3.set_xlabel(r'$t/T$')
 ax3.set_ylabel(r"$VT/L$")
-ax3.legend()
 ax3.set_xlim((0, 1))
+ax3.set_box_aspect(1) 
 # ax3.set_ylim((np.min(body_speed_data)-0.1*np.ptp(body_speed_data), np.max(body_speed_data)+0.1*np.ptp(body_speed_data)))
 
 ax4.set_xlabel(r'$t/T$')
-ax4.set_ylabel(r"$Ω$")
-ax4.legend()
+ax4.set_ylabel(r"$\Omega$")
+ax4.legend(fontsize=16, frameon=False)
 ax4.set_xlim((0, 1))
+formatter = mticker.ScalarFormatter(useMathText=True)
+formatter.set_powerlimits((-4, -4))  # Forces 10^-5 notation
+ax4.yaxis.set_major_formatter(formatter)
+ax4.set_box_aspect(1) 
+
 
 ax5.set_xlabel(r'$t/T$')
-ax5.set_ylabel(r'$\mathcal{R}T^2/\mu L^3$')
-ax5.legend()
+ax5.set_ylabel(r'$\mathcal{R}T^2/\eta L^3$')
+ax5.legend(fontsize=16, frameon=False)
 ax5.set_xlim((0, 1))
+ax5.set_box_aspect(1) 
+
+
+formatter = mticker.ScalarFormatter(useMathText=True)
+formatter.set_powerlimits((-1, 4))  # Forces 10^4 notation when values are large
+ax5.yaxis.set_major_formatter(formatter)
 
 ax6.set_xlabel(r'$t/T$')
 ax6.set_ylabel(r'$Efficiency$')
-ax6.legend()
+ax6.legend(fontsize=16, frameon=False)
 ax6.set_xlim((0, 1))
+ax6.set_box_aspect(1) 
 
 fig1.tight_layout()
 fig2.tight_layout()
@@ -177,10 +236,10 @@ fig3.tight_layout()
 fig4.tight_layout()
 fig5.tight_layout()
 fig6.tight_layout()
-fig1.savefig(f'fig/r_1T_index{index}.pdf', bbox_inches = 'tight', format='pdf')
-fig2.savefig(f'fig/num_beat_1T_index{index}.pdf', bbox_inches = 'tight', format='pdf')
-fig3.savefig(f'fig/speed_1T_index{index}.pdf', bbox_inches = 'tight', format='pdf')
-fig4.savefig(f'fig/rot_speed_1T_index{index}.pdf', bbox_inches = 'tight', format='pdf')
-fig5.savefig(f'fig/dissipation_1T_index{index}.pdf', bbox_inches = 'tight', format='pdf')
-fig6.savefig(f'fig/efficiency_1T_index{index}.pdf', bbox_inches = 'tight', format='pdf')
+fig1.savefig(f'fig/r_1T.pdf', bbox_inches = 'tight', format='pdf')
+fig2.savefig(f'fig/num_beat_1T.pdf', bbox_inches = 'tight', format='pdf')
+fig3.savefig(f'fig/speed_1T.pdf', bbox_inches = 'tight', format='pdf')
+fig4.savefig(f'fig/rot_speed_1T.pdf', bbox_inches = 'tight', format='pdf')
+fig5.savefig(f'fig/dissipation_1T.pdf', bbox_inches = 'tight', format='pdf')
+fig6.savefig(f'fig/efficiency_1T.pdf', bbox_inches = 'tight', format='pdf')
 plt.show()

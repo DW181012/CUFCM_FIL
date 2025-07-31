@@ -91,7 +91,7 @@ extern std::string CUFCM_CONFIG_FILE_NAME;
 // This enables filaments to be seeded as pair and have difference frequency
 
 
-#define BODY_VELOCITY_TYPE 1
+#define BODY_VELOCITY_TYPE 0
 // 0 = FREE TO SWIM
 // 1 = PRESCRIBED VELOCITIES
 // 2 = PRESCRIBED ROTATION ONLY
@@ -118,7 +118,7 @@ extern std::string CUFCM_CONFIG_FILE_NAME;
 
 #elif CILIA_TYPE==3
 
-  #define SHAPE_SEQUENCE 4
+  #define SHAPE_SEQUENCE 7
   // Valid options:
   // 0 = 'Build-a-beat'. This choice has some parameters to set (see below).
   // 1 = The 'Fulford and Blake' beat pattern for mammalian airway cilia. See the data-fitting description in  "A model for the micro-structure in ciliated organisms", Blake (1972).
@@ -127,6 +127,8 @@ extern std::string CUFCM_CONFIG_FILE_NAME;
   // 4 = Original 'Fulford and Blake' beat - <L>=0.975
   // 5 = Bi-cilia
   // 6 = Bi-cilia long T - variable phase difference
+  // 7 = The 'Fulford and Blake' beat pattern with no-wall generalised force
+  
 
   #if SHAPE_SEQUENCE==0
 
@@ -174,7 +176,7 @@ extern std::string CUFCM_CONFIG_FILE_NAME;
 
 #endif
 
-#define BODY_OR_SURFACE_TYPE 5
+#define BODY_OR_SURFACE_TYPE 2
 // Valid options:
 // 0 = An infinite plane wall at z = 0. This choice has some sub-types (see below). // 20240717:decrecated - only compatible with RPY
 // 1 = Deformed planes with 2 principal curvatures (partially implemented)
@@ -191,6 +193,11 @@ extern std::string CUFCM_CONFIG_FILE_NAME;
   // 1 = Filaments are placed on a hexagonal grid.
   // 2 = Filaments are placed on a rectangular grid only compatable with cuFCM.
   // 3 = Filaments are placed on a lattice compatable with cuFCM.
+
+  // Force to use the rectangular seeding if write genralised forces
+  #if WRITE_GENERALISED_FORCES
+    #define SEEDING_TYPE 0
+  #endif
 
   // Define one lattice size and leave the other blank to have it automatically calculated to fit the number of filaments.
   // Leave both blank to have the code attempt to make a regular lattice.
@@ -243,7 +250,7 @@ extern std::string CUFCM_CONFIG_FILE_NAME;
 
 #endif
 
-#define MOBILITY_TYPE 1
+#define MOBILITY_TYPE 4
 // Valid options:
 // 0 = Basic Stokes drag. No hydrodynamic interactions between particles.
 // 1 = Rotne-Prager-Yamakawa (RPY) mobility matrices (with the corrections due to Swan and Brady if an infinite plane wall is selected).
@@ -488,6 +495,7 @@ extern Real REV_RATIO;
   #define FULFORD_AND_BLAKE_BEAT_ORIGINAL (SHAPE_SEQUENCE==4)
   #define BICILIA (SHAPE_SEQUENCE==5) // deprecated - use PAIR instead
   #define BICILIA_LONGT (SHAPE_SEQUENCE==6) // deprecated - use PAIR instead
+  #define FULFORD_AND_BLAKE_BEAT_NO_WALL (SHAPE_SEQUENCE==7)
 
 #endif
 

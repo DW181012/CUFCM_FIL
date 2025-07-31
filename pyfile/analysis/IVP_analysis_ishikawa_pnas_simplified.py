@@ -152,6 +152,7 @@ path = 'data/ishikawa/20240802_pnas_L0.975/'
 
 # plot sim data
 path = "data/ishikawa/20240731_pnas_L1/"
+path = 'data/ishikawa/20240802_pnas_L0.975/'
 # path = "data/ishikawa/20240805_volvox_beat/"
 for ind in range(trunc):
     try:
@@ -201,9 +202,9 @@ for i, filename in enumerate(files[:trunc]):
 legend11 = ax.legend(loc='center', frameon=False)
 # line1, = ax.plot([-1, -1.1], [-1, -1.1], ls='-', c='black', label=r'$L=0.975$' )
 # line2, = ax.plot([-1, -1.1], [-1, -1.1], ls='dashdot', c='black', label=r'$L=1$' )
-line3, = ax.plot([-1, -1.1], [-1, -1.1], ls='solid', c='black', label=r'$Present\ result$' )
-line4, = ax.plot([-1, -1.1], [-1, -1.1], ls='dashed', c='black', label=r'$Omori.\ (2020)$')
-legend21 = ax.legend(handles = [line3, line4], loc='upper right')
+line3, = ax.plot([-1, -1.1], [-1, -1.1], ls='solid', c='black', label=r'Present data' )
+line4, = ax.plot([-1, -1.1], [-1, -1.1], ls='dashed', c='black', label=r'Omori et al. (2020)')
+legend21 = ax.legend(handles = [line3, line4], loc='upper right', fontsize=18, frameon=False)
 ax.add_artist(legend11)
 ax.set_xlim(0, 1)
 ax.set_ylim(-0.6)
@@ -213,14 +214,14 @@ ax.set_ylabel(r'$V_zT/L$')
 legend21 = ax2.legend(loc='center', frameon=False)
 # line1, = ax2.plot([-1, -1.1], [-1, -1.1], ls='-', c='black', label=r'$L=0.975$' )
 # line2, = ax2.plot([-1, -1.1], [-1, -1.1], ls='dashdot', c='black', label=r'$L=1$' )
-line3, = ax2.plot([-1, -1.1], [-1, -1.1], ls='solid', c='black', label=r'$Present\ result$' )
-line4, = ax2.plot([-1, -1.1], [-1, -1.1], ls='dashed', c='black', label=r'$Omori.\ (2020)$')
-legend22 = ax2.legend(handles = [line3, line4], loc='upper right')
+line3, = ax2.plot([-1, -1.1], [-1, -1.1], ls='solid', c='black', label=r'Present data' )
+line4, = ax2.plot([-1, -1.1], [-1, -1.1], ls='dashed', c='black', label=r'Omori et al. (2020)')
+legend22 = ax2.legend(handles = [line3, line4], loc='upper right', fontsize=18, frameon=False)
 ax2.add_artist(legend21)
 ax2.set_xlim(0, 1)
 ax2.set_ylim(0)
 ax2.set_xlabel(r'$t/T$')
-ax2.set_ylabel(r'$\mathcal{R}T^2/\mu L^3$')
+ax2.set_ylabel(r'$\mathcal{R}T^2/\eta L^3$')
 
 ax2.yaxis.set_major_formatter(ScalarFormatter(useMathText=True))
 ax2.ticklabel_format(axis='y', style='sci', scilimits=(4,4))
@@ -233,11 +234,15 @@ ax4.set_ylim(0.92, 1.06)
 ax4.set_xlabel(r'$t/T$')
 ax4.set_ylabel(r'$L$')
 
+ax.set_box_aspect(0.7) 
+ax2.set_box_aspect(0.7) 
+
 fig.tight_layout()
 fig2.tight_layout()
 fig3.tight_layout()
 fig4.tight_layout()
 fig.savefig(f'fig/ishikawa_pnas_comparison_vel.png', bbox_inches = 'tight', format='png', transparent=True)
 fig2.savefig(f'fig/ishikawa_pnas_comparison_dissipation.png', bbox_inches = 'tight', format='png', transparent=True)
+fig2.savefig(f'fig/ishikawa_pnas_comparison_dissipation.pdf', bbox_inches = 'tight', format='pdf', transparent=True)
 # fig4.savefig(f'fig/ishikawa_pnas_comparison_real_length.png', bbox_inches = 'tight', format='png', transparent=True)
 plt.show()

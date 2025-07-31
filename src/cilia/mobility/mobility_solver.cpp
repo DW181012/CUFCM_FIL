@@ -12,6 +12,8 @@
 #include "omp.h"
 #include "../../general/util.hpp"
 #include "../../../config.hpp"
+#include <filesystem>
+namespace fs = std::filesystem;
 
 mobility_solver::~mobility_solver(){}
 
@@ -313,11 +315,11 @@ void mobility_solver::read_positions_and_forces(std::vector<swimmer>& swimmers){
             q_angle *= 0.5*swimmers[n].filaments[i].omega0/PI;
 
             // Apply the torsional spring force
-            Real Qbar = 0.0;
-            for (int ii = 0; ii < gen_angle_force_refs.size(); ii++){
-              Qbar += std::abs(gen_angle_force_refs[ii]);
-            }
-            Qbar /= gen_angle_force_refs.size();
+            // Real Qbar = 0.0;
+            // for (int ii = 0; ii < gen_angle_force_refs.size(); ii++){
+            //   Qbar += std::abs(gen_angle_force_refs[ii]);
+            // }
+            // Qbar /= gen_angle_force_refs.size();
 
             Real k_scaling = (swimmers[n].filaments[i].omega0*FIL_LENGTH*FIL_LENGTH*FIL_LENGTH);
 
@@ -328,7 +330,6 @@ void mobility_solver::read_positions_and_forces(std::vector<swimmer>& swimmers){
                 fene_factor = 0.5*swimmers[n].filaments[i].shape_rotation_angle * (1 + pow(swimmers[n].filaments[i].shape_rotation_angle, 2)/pow(max_angle,2)*std::exp(std::abs(swimmers[n].filaments[i].shape_rotation_angle) - max_angle));
               }else{
                 fene_factor = swimmers[n].filaments[i].shape_rotation_angle;
-                // fene_factor = swimmers[n].filaments[i].shape_rotation_angle/std::abs(1.0 - pow(swimmers[n].filaments[i].shape_rotation_angle / max_angle, 2));
               }
             }
             
@@ -351,13 +352,6 @@ void mobility_solver::read_positions_and_forces(std::vector<swimmer>& swimmers){
             std::mt19937 gen{rd()};
             std::normal_distribution<Real> d(0,1);
             Real noise = d(gen);
-
-            // Real Qbarp = 0.0;
-            // for (int ii = 0; ii < gen_phase_force_refs.size(); ii++){
-            //   Qbarp += std::abs(gen_phase_force_refs[ii]);
-            // }
-            // Qbarp /= gen_phase_force_refs.size();
-            // std::cout << i << "     " << Qbarp << std::endl;
             
             q_phase += FORCE_NOISE_MAG*noise;
 
@@ -1250,7 +1244,8 @@ void mobility_solver::read_positions_and_forces(std::vector<swimmer>& swimmers){
 
       #else
 
-        // compute ( - r_2 - K^T M^-1 r_1 )
+        // compute ( - r_2 - K^T M^-1 r_1 ) 
+        // note M^-1 r_1 is already computed!!!
         out.multiply_block(3*NSWIM*(NBLOB + NFIL*NSEG), 6*NSWIM, -1.0);
 
         for (int n = 0; n < NSWIM; n++){
@@ -3279,5 +3274,53 @@ void mobility_solver::write_data(const int nt, const std::vector<swimmer>& swimm
 
     seg_forces_file << std::endl;
     seg_forces_file.close();
+  #endif
+}
+
+void mobility_solver::write_generalised_forces(){
+  #if !WRITE_GENERALISED_FORCES
+
+    std::string dst_dir = SIMULATION_DIR + "generalised_forces/";
+    fs::create_directories(dst_dir); // Ensure directory exists
+
+    // List of source filenames
+    std::vector<std::string> source_files = {
+        reference_phase_generalised_force_file_name(),
+        reference_angle_generalised_force_file_name(),
+        reference_s_values_file_name()
+    };
+
+    for (const auto& src_path : source_files) {
+        fs::path src(src_path);
+        fs::path dst = fs::path(dst_dir) / src.filename();  // Preserve filename
+        fs::copy_file(src, dst, fs::copy_options::overwrite_existing);
+    }
+    // int num_saves;
+    // std::ifstream generalised_phase_force_file(reference_phase_generalised_force_file_name());
+    // std::string full_path = SIMULATION_DIR + reference_phase_generalised_force_file_name();
+    // fs::create_directories(fs::path(full_path).parent_path());
+
+    // if (generalised_phase_force_file.good()){
+    //   generalised_phase_force_file >> num_saves;
+    //   generalised_phase_force_file.close();
+    // }
+
+    // std::ofstream g_phase_force_file(SIMULATION_DIR + reference_phase_generalised_force_file_name());
+    // std::ofstream g_angle_force_file(SIMULATION_DIR + reference_angle_generalised_force_file_name());
+    // g_phase_force_file << num_saves << " ";
+    // g_angle_force_file << num_saves << " ";
+
+    // for (int n = 0; n < num_saves; n++){
+    //   #if DYNAMIC_PHASE_EVOLUTION
+    //     g_phase_force_file << gen_phase_force_refs[n] << " ";
+    //   #endif
+    //   #if DYNAMIC_SHAPE_ROTATION
+    //     g_angle_force_file << gen_angle_force_refs[n] << " ";
+    //   #endif
+    // }
+    // g_phase_force_file << "\n";
+    // g_phase_force_file.close();
+    // g_angle_force_file << "\n";
+    // g_angle_force_file.close();
   #endif
 }
