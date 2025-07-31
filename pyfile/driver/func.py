@@ -82,7 +82,7 @@ class DRIVER:
 
         self.category = 'pizza_sim/'
         self.exe_name = 'cilia_1e-4_pizza'
-        self.date = '20250225_pizza_demo'
+        self.date = '20250728_defect_theta_45_random_phase_12'
         self.dir = f"data/{self.category}{self.date}{self.afix}/"
         
 
@@ -187,7 +187,7 @@ class DRIVER:
                         reverse_fil_direction_ratio=0.0
 
                         # # planar triangle
-                        nfil = int(32)
+                        nfil = int(64)
                         nblob = int(1600)
                         nseg = 20
                         ar = round(1, 2)
@@ -203,7 +203,7 @@ class DRIVER:
                         blob_x_dim=10
                         hex_num=2
                         reverse_fil_direction_ratio=0.0
-                        sim_length = 1
+                        sim_length = 500
                         force_noise_mag = 0.0
                         omega_spread = 0.0
                         pair_dp = 1.0
@@ -457,6 +457,7 @@ class DRIVER:
             self.write_ini("Filenames", "blobplacement_file_name", f"input/placement/icosahedron/icosa_d6_N40962.dat")
             # self.write_ini("Filenames", "blobplacement_file_name", f"input/placement/icosahedron/icosa_d4_N2562.dat")
             self.write_ini("Filenames", "simulation_icstate_name", f"{self.dir}psi.dat")
+            # self.write_ini("Filenames", "simulation_icstate_name", f"input/pizza_sim/psi0.dat")
             self.write_ini("Filenames", "simulation_bodystate_name", f"{self.dir}bodystate{i}.dat")
             self.write_ini("Filenames", "cufcm_config_file_name", f"input/simulation_info_cilia")
 

@@ -19,21 +19,21 @@ from beat import *
 from matplotlib.ticker import ScalarFormatter
 import matplotlib.font_manager as fm
 
-# Path to the directory where fonts are stored
-font_dir = os.path.expanduser("~/.local/share/fonts/cmu/cm-unicode-0.7.0")
-# Choose the TTF or OTF version of CMU Serif Regular
-font_path = os.path.join(font_dir, 'cmunrm.ttf')  # Or 'cmunrm.otf' if you prefer OTF
-# Load the font into Matplotlib's font manager
-prop = fm.FontProperties(fname=font_path)
-# Register each font file with Matplotlib's font manager
-for font_file in os.listdir(font_dir):
-    if font_file.endswith('.otf'):
-        fm.fontManager.addfont(os.path.join(font_dir, font_file))
-# Set the global font family to 'serif' and specify CMU Serif
-plt.rcParams['font.family'] = 'serif'
-plt.rcParams['font.serif'] = ['CMU Serif']
-plt.rcParams['mathtext.fontset'] = 'cm'  # Use 'cm' for Computer Modern
-plt.rcParams.update({'font.size': 24})
+# # Path to the directory where fonts are stored
+# font_dir = os.path.expanduser("~/.local/share/fonts/cmu/cm-unicode-0.7.0")
+# # Choose the TTF or OTF version of CMU Serif Regular
+# font_path = os.path.join(font_dir, 'cmunrm.ttf')  # Or 'cmunrm.otf' if you prefer OTF
+# # Load the font into Matplotlib's font manager
+# prop = fm.FontProperties(fname=font_path)
+# # Register each font file with Matplotlib's font manager
+# for font_file in os.listdir(font_dir):
+#     if font_file.endswith('.otf'):
+#         fm.fontManager.addfont(os.path.join(font_dir, font_file))
+# # Set the global font family to 'serif' and specify CMU Serif
+# plt.rcParams['font.family'] = 'serif'
+# plt.rcParams['font.serif'] = ['CMU Serif']
+# plt.rcParams['mathtext.fontset'] = 'cm'  # Use 'cm' for Computer Modern
+# plt.rcParams.update({'font.size': 24})
 
 
 # mpl.rcParams['mathtext.fontset'] = 'stix'
@@ -122,10 +122,10 @@ class VISUAL:
         # self.date = '20250204_1e-4_ref'
         # self.dir = f"data/regular_wall_sim/{self.date}/"
 
-        self.date = '20250225_flowfield_sym'
+        self.date = '20250311_flowfield_sym'
         self.dir = f"data/for_paper/flowfield_example/{self.date}/"
 
-        self.date = '20250225_pizza_demo'
+        self.date = '20250728_defect_theta_45_random_phase_12'
         self.dir = f"data/pizza_sim/{self.date}/"
         
 
@@ -783,8 +783,8 @@ class VISUAL:
                     #     fil_angles_str = fil_angles_f.readline()
                     frame += 1
                 
-            plt.savefig(f'fig/fil_phase_plane_index{self.index}_{self.date}.pdf', bbox_inches = 'tight', format='pdf')
-            plt.show()
+            plt.savefig(f'fig/fil_phase_plane_index{self.index}_{self.date}.png', bbox_inches = 'tight', format='png')
+            # plt.show()
 
 ## Ciliates
 # Single sim
@@ -3354,7 +3354,7 @@ class VISUAL:
             
             ax.axis('off')
             ax.set_aspect('equal')
-            # plt.savefig(f'fig/flowfield2D_{self.nfil}fil_frame{self.plot_end_frame}.pdf', bbox_inches = 'tight', format='pdf')
+            plt.savefig(f'fig/flowfield2D_{self.nfil}fil_frame{self.plot_end_frame}.png', bbox_inches = 'tight', format='png')
             plt.show()
 
     def flow_field_kymograph(self):

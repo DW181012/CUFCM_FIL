@@ -202,7 +202,7 @@ extern std::string CUFCM_CONFIG_FILE_NAME;
 
 #elif BODY_OR_SURFACE_TYPE==2 or BODY_OR_SURFACE_TYPE==4 or BODY_OR_SURFACE_TYPE==5
 
-  #define SEEDING_TYPE 8
+  #define SEEDING_TYPE 10
   // Valid options:
   // 0 = Filaments are evenly distributed over the surface.
   // 1 = Filaments are seeded in an equatorial band.
@@ -214,6 +214,8 @@ extern std::string CUFCM_CONFIG_FILE_NAME;
   // 7 = Filaments are evenly distributed over the surface but with potential at poles
   // 8 = Equal-area centric seeding (pizza-like rigidbody plane)
   // 9 = Read from files
+  //10 = Seeding and orientation defined by a family of contours
+  //11 = MCC seeding with metachronal wave perpendicular to beating orientation
 
   #if BODY_OR_SURFACE_TYPE==5
     #define FOURIER_DIR "input/rigidwall_seeding/"
@@ -533,6 +535,8 @@ extern Real REV_RATIO;
   #define MISMATCH_SEEDING (SEEDING_TYPE==6)
   #define UNIFORM_SEEDING_POLE (SEEDING_TYPE==7)
   #define CENTRIC_WALL_SEEDING (SEEDING_TYPE==8)
+  #define CONTOUR_SEEDING (SEEDING_TYPE==10)
+  #define MCC_SEEDING (SEEDING_TYPE==11)
 
 #endif
 
