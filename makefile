@@ -22,9 +22,6 @@ MOBILITY_SOURCE =
 else ifeq ($(MOBILITY_TYPE), 4) # cuFCM
 MOBILITY_OPTS = -arch=sm_75 -std=c++14 -O3 -I../include -lcufft -lcurand -lineinfo
 MOBILITY_SOURCE = fcm_mobility_solver.cu $(CUFCM_ROOT)CUFCM_CELLLIST.cu $(CUFCM_ROOT)CUFCM_FCM.cu $(CUFCM_ROOT)CUFCM_DATA.cu $(CUFCM_ROOT)CUFCM_SOLVER.cu $(CUFCM_ROOT)CUFCM_CORRECTION.cu
-else ifeq ($(MOBILITY_TYPE), 5) # pairwise FCM
-MOBILITY_OPTS = -std=c++11
-MOBILITY_SOURCE = pairwisefcm_mobility_solver.cu
 endif
 
 CILIA_CPP = matrix.cpp quaternion.cpp segment.cpp filament.cpp broyden_solver.cpp rigid_body.cpp swimmer.cpp mobility_solver.cpp
@@ -112,11 +109,11 @@ LINK= -lcufft -lcurand -llapack -lopenblas -llapacke -lineinfo
 HPC_LINK = -lcufft -lcurand -L/usr/lib64 -l:liblapack.so.3.8 -l:libopenblas.so.0 -l:liblapacke.so.3.8
 
 cilia_nvidia4_CUFCM_double: $(CILIA_CPP) $(CILIA_CUDA)
-	nvcc $^ -DUSE_DOUBLE_PRECISION $(NVCC_FLAGS) $(LINK) $(GEN_FLAGS) -o bin/cilia_1e-8_free_300
+	nvcc $^ -DUSE_DOUBLE_PRECISION $(NVCC_FLAGS) $(LINK) $(GEN_FLAGS) -o bin/cilia_1e-6_sangani_rpy
 
 cilia_nvidia4_CUFCM: $(CILIA_CPP) $(CILIA_CUDA)
-	nvcc $^  $(NVCC_FLAGS) $(LINK) $(GEN_FLAGS) -o bin/cilia_1e-4
+	nvcc $^ $(NVCC_FLAGS) $(LINK) $(GEN_FLAGS) -o bin/cilia_1e-4_pizza
 
 cilia_ic_hpc_CUFCM: $(CILIA_CPP) $(CILIA_CUDA)
 	module load cuda/11.4.2 && \
-	nvcc $^ $(NVCC_FLAGS) $(HPC_LINK) $(GEN_FLAGS) -o bin/cilia_1e-4_pizza
+	nvcc $^ $(NVCC_FLAGS) $(HPC_LINK) $(GEN_FLAGS) -o bin/cilia

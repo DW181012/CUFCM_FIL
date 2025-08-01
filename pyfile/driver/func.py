@@ -22,10 +22,10 @@ class DRIVER:
         # self.dir = f"data/{self.category}{self.date}{self.afix}/"
 
 
-        self.category = 'ic_hpc_sim_free_with_force2/'
-        self.exe_name = 'cilia_1e-4_free'
-        self.date = '20240311_1'
-        self.dir = f"data/{self.category}{self.date}{self.afix}/"
+        # self.category = 'ic_hpc_sim_free_with_force/'
+        # self.exe_name = 'cilia_1e-4_free_with_force'
+        # self.date = '20240311_1'
+        # self.dir = f"data/{self.category}{self.date}{self.afix}/"
 
         # self.category = 'resolution/'
         # self.date = '20240822_sangani_boxsize2'
@@ -41,7 +41,6 @@ class DRIVER:
         # self.exe_name = 'cilia_1e-4_instability_double'
         # self.date = '20241028_test'
         # self.dir = f"data/{self.category}{self.date}{self.afix}/"
-        
 
 
         # self.category = 'ishikawa/'
@@ -66,46 +65,24 @@ class DRIVER:
         # self.date = '20250125_fixed_correct'
         # self.dir = f"data/{self.category}{self.date}{self.afix}/"
 
-        self.category = 'for_paper/roadmap/'
-        self.exe_name = 'cilia_1e-4'
-        self.date = '20250610_temp'
-        self.dir = f"data/{self.category}{self.date}{self.afix}/"
-
-        self.category = 'tempcheck/makeup_pattern_with_force/'
-        self.exe_name = 'cilia_1e-4'
-        self.date = '20240724_symplectic'
-        self.dir = f"data/{self.category}{self.date}{self.afix}/"
-
         self.category = 'for_paper/flowfield_example/'
-        self.date = '20250522_flowfield_free_tilt_rerun'
-        self.exe_name = 'cilia_1e-4'
+        self.exe_name = 'cilia_1e-4_fixed'
+        self.date = '20250225_flowfield_sym'
         self.dir = f"data/{self.category}{self.date}{self.afix}/"
-        
-
-        # self.category = 'for_paper/flowfield_example/'
-        # self.exe_name = 'cilia_1e-8_free_300'
-        # # self.exe_name = 'cilia_1e-4_free'
-        # self.date = '20250522_flowfield_free'
-        # self.dir = f"data/{self.category}{self.date}{self.afix}/"
-
-        # self.category = 'for_paper/giant_swimmer_rerun/'
-        # self.exe_name = 'cilia_1e-4_free'
-        # self.date = '20250507'
-        # self.dir = f"data/{self.category}{self.date}{self.afix}/"
 
         # self.category = 'resolution/'
         # self.exe_name = 'cilia_1e-4_squirmer'
         # self.date = '20250220_1e-6_settling'
         # self.dir = f"data/{self.category}{self.date}{self.afix}/"
 
-        # self.category = 'pizza_sim/'
-        # self.exe_name = 'cilia_1e-4_pizza'
-        # self.date = '20250225_pizza_demo'
+        # self.category = 'regular_wall_sim/'
+        # self.exe_name = 'cilia_1e-4_squirmer'
+        # self.date = '20250204_1e-4_ref'
         # self.dir = f"data/{self.category}{self.date}{self.afix}/"
 
         self.category = 'pizza_sim/'
         self.exe_name = 'cilia_1e-4_pizza'
-        self.date = '20250728_defect_theta_45_random_phase_12'
+        self.date = '20250728_defect_theta_45_random_phase_18'
         self.dir = f"data/{self.category}{self.date}{self.afix}/"
         
 
@@ -140,7 +117,7 @@ class DRIVER:
                      "force_noise_mag": [],
                      "omega_spread": []}
 
-        self.sweep_shape = (16, 1, 1, 1)
+        self.sweep_shape = (1, 1, 1, 1)
         # self.sweep_shape = (6, 1, 1, 1)
 
         self.num_sim = 0
@@ -244,27 +221,26 @@ class DRIVER:
                         # pair_dp = 1.0
 
                         # # # IVP sim
-                        nfil = 639
-                        nblob = 40961
-                        ar = 15.0
+                        # nfil = 639
+                        # nblob = 40961
+                        # ar = 15.0
                         
-                        nseg = 20
-                        nx=400
-                        ny=400
-                        nz=400
-                        boxsize=4000 *(i+1)
-                        spring_factor = round(0.005 + 0.005*i, 3)
+                        # nseg = 20
+                        # nx=256
+                        # ny=256
+                        # nz=256
+                        # boxsize=4000
                         # spring_factor = round(0.005, 3)
-                        period = 1
-                        sim_length = 1000
-                        # tilt_angle = i*1./18*3.141592653
-                        tilt_angle = 0.0
-                        wavnum = 0.0
-                        wavnum_dia = 0.0
-                        fene_model = 0
-                        omega_spread = 0.0
-                        force_noise_mag = 0.0
-                        pair_dp = 1.0
+                        # period = 1
+                        # sim_length = 30
+                        # tilt_angle = i*1./9*3.141592653
+                        # pair_dp = 1.0
+                        # wavnum = 0.0
+                        # wavnum_dia = 0.0
+                        # fene_model = 1
+                        # omega_spread = 0.0
+                        # force_noise_mag = 0.0
+                        # pair_dp = 1.0
                         
 
                         # # ishikawa pnas
