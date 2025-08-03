@@ -82,7 +82,7 @@ class DRIVER:
 
         self.category = 'pizza_sim/'
         self.exe_name = 'cilia_1e-4_pizza'
-        self.date = '20250728_defect_theta_45_random_phase_18'
+        self.date = '20250728_defect_theta_0_random_phase_05'
         self.dir = f"data/{self.category}{self.date}{self.afix}/"
         
 

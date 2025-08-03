@@ -1387,7 +1387,7 @@
 
   void contour_seeding(Real *const pos_ref, Real *const polar_dir_refs, Real *const azi_dir_refs, Real *const normal_refs, const int N, shape_fourier_description& shape, Real disc_r){
     
-    int CHOICE_OF_CONTOUR = 4;
+    int CHOICE_OF_CONTOUR = 1;
     // Valid options:
     // 0 = source
     // 1 = sink
