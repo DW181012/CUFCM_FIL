@@ -1631,7 +1631,7 @@
           //const Real theta = 0.001;
           const Real theta = 0.001;
           //double angle = std:: atan2(pos_ref[3*n + 1],pos_ref[3*n]) + atan(1) * 4 * (pos_ref[3*n]<0);
-          double angle_tilt = atan(1) / 3 * 2;
+          double angle_tilt = atan(1) / 3 * 3;
           double angle = std:: atan2(pos_ref[3*n + 1],pos_ref[3*n]) + 2 * PI * (pos_ref[3*n + 1] < 0) ;//* (pos_ref[3*n]>0) + atan2(-pos_ref[3*n + 1],-pos_ref[3*n]) * (pos_ref[3*n]<0);
           //double phase_ini = -angle * 2;
 
