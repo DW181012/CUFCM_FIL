@@ -82,7 +82,7 @@ class DRIVER:
 
         self.category = 'pizza_sim/'
         self.exe_name = 'cilia_1e-4_pizza'
-        self.date = '20250825_defective_15_random_phase_06'
+        self.date = '20250825_defective_0_random_phase_09'
         self.dir = f"data/{self.category}{self.date}{self.afix}/"
         
 
@@ -188,7 +188,7 @@ class DRIVER:
 
                         # # planar triangle
                         nfil = int(240)
-                        nblob = int(1600)
+                        nblob = int(3200)
                         nseg = 20
                         ar = round(1, 2)
                         period = 1

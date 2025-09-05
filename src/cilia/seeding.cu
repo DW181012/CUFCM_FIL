@@ -1587,7 +1587,7 @@
 
   void defective_seeding(Real *const pos_ref, Real *const polar_dir_refs, Real *const azi_dir_refs, Real *const normal_refs, const int N, shape_fourier_description& shape, Real disc_r){
     
-    int CHOICE_OF_CONTOUR = 4;
+    int CHOICE_OF_CONTOUR = 1;
     // Valid options:
     // 0 = source
     // 1 = sink
@@ -1684,6 +1684,7 @@
           const Real phi = std:: atan2(beating_orientation[1], beating_orientation[0]);
           //const Real phi = std:: atan2(pos_ref[3*n + 1],pos_ref[3*n]);
           matrix frame = shape.full_frame(theta, phi);
+
 
           polar_dir_refs[3*n] = frame(0);
           polar_dir_refs[3*n + 1] = frame(1);
@@ -1918,6 +1919,15 @@
         // hexagonal_seeding(blob_references, polar_dir_refs, azi_dir_refs, normal_refs, NBLOB, shape, blob_step_x, blob_grid_dim_x, hex_num, rev_ratio);
         hexagonal_seeding(blob_references, polar_dir_refs, azi_dir_refs, normal_refs, NBLOB, shape, BLOB_SPACING, BLOB_X_DIM, HEX_NUM, REV_RATIO);
       
+      #elif DEFECTIVE_SEEDING
+        Real disc_radius = BLOB_SPACING*my_sqrt(NBLOB);
+        // std::ifstream in("separation.dat"); // using the 6th number as input
+        // for (int di=0; di<6; di++){
+        //   in >> disc_radius;
+        // }
+        std::cout << "Seeking an centric placement for the blobs..." << std::endl;
+        equal_area_seeding_centric(blob_references, polar_dir_refs, azi_dir_refs, normal_refs, NBLOB, shape, disc_radius, 0.0);
+
       #elif CENTRIC_WALL_SEEDING
         Real disc_radius = BLOB_SPACING*my_sqrt(NBLOB);
         // std::ifstream in("separation.dat"); // using the 6th number as input
