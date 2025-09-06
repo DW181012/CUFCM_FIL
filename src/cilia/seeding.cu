@@ -1587,7 +1587,7 @@
 
   void defective_seeding(Real *const pos_ref, Real *const polar_dir_refs, Real *const azi_dir_refs, Real *const normal_refs, const int N, shape_fourier_description& shape, Real disc_r){
     
-    int CHOICE_OF_CONTOUR = 1;
+    int CHOICE_OF_CONTOUR = 4;
     // Valid options:
     // 0 = source
     // 1 = sink
@@ -1603,11 +1603,12 @@
       dim_true = dim_true + 1;
     }
 
+    double disc_d = disc_r * 2;
     int dim_defect = sqrt(pow(dim_true, 2) - N);
     int defect_start = (dim_true - dim_defect) / 2;
     int defect_end = defect_start + dim_defect - 1;
 
-    double spacing = disc_r/(sqrt(2) * dim_true);
+    double spacing = disc_d/(sqrt(2) * dim_true);
     double length_side = spacing * (dim_true - 1);
     
     // set up the initial phase (synchronized beating)
@@ -1631,7 +1632,7 @@
           //const Real theta = 0.001;
           const Real theta = 0.001;
           //double angle = std:: atan2(pos_ref[3*n + 1],pos_ref[3*n]) + atan(1) * 4 * (pos_ref[3*n]<0);
-          double angle_tilt = atan(1) / 3 * 5;
+          double angle_tilt = atan(1) / 2 * 5;
           double angle = std:: atan2(pos_ref[3*n + 1],pos_ref[3*n]) + 2 * PI * (pos_ref[3*n + 1] < 0) ;//* (pos_ref[3*n]>0) + atan2(-pos_ref[3*n + 1],-pos_ref[3*n]) * (pos_ref[3*n]<0);
           //double phase_ini = -angle * 2;
 
@@ -2111,7 +2112,7 @@
       std::cout << "Seeding and orientation defined by a family of contours..." << std::endl;
 
       //disc_radius = FIL_SPACING*my_sqrt(NFIL);
-      double disc_radius = 6.25 * BLOB_SPACING * my_sqrt(NBLOB);
+      double disc_radius = 3.90625 * 8 * BLOB_SPACING * my_sqrt(NBLOB);
       contour_seeding(filament_references, polar_dir_refs, azi_dir_refs, normal_refs, NFIL, shape,disc_radius);
 
     #elif MCC_SEEDING
@@ -2126,7 +2127,7 @@
 
       std::cout << "square-formation seeding with a small defect of square patch..." << std::endl;
 
-      double disc_radius = 3.90625 * FIL_SPACING*my_sqrt(NFIL);
+      double disc_radius = FIL_SPACING*my_sqrt(NFIL);
       //double disc_radius = 6.25 * BLOB_SPACING * my_sqrt(NBLOB);
       defective_seeding(filament_references, polar_dir_refs, azi_dir_refs, normal_refs, NFIL, shape,disc_radius);
       
