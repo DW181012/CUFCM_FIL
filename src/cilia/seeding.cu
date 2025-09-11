@@ -1587,7 +1587,7 @@
 
   void defective_seeding(Real *const pos_ref, Real *const polar_dir_refs, Real *const azi_dir_refs, Real *const normal_refs, const int N, shape_fourier_description& shape, Real disc_r){
     
-    int CHOICE_OF_CONTOUR = 4;
+    int CHOICE_OF_CONTOUR = 1;
     // Valid options:
     // 0 = source
     // 1 = sink
@@ -1632,7 +1632,7 @@
           //const Real theta = 0.001;
           const Real theta = 0.001;
           //double angle = std:: atan2(pos_ref[3*n + 1],pos_ref[3*n]) + atan(1) * 4 * (pos_ref[3*n]<0);
-          double angle_tilt = atan(1) / 2 * 5;
+          double angle_tilt = atan(1) / 2 * 2;
           double angle = std:: atan2(pos_ref[3*n + 1],pos_ref[3*n]) + 2 * PI * (pos_ref[3*n + 1] < 0) ;//* (pos_ref[3*n]>0) + atan2(-pos_ref[3*n + 1],-pos_ref[3*n]) * (pos_ref[3*n]<0);
           //double phase_ini = -angle * 2;
 
@@ -1647,6 +1647,7 @@
           double phase_ini = dis(gen) * 2 * PI;
           //double phase_ini = (double(rand() % 10000)/10000) * 2 * PI;
           double alpha = 2;
+          phase_ini = 0;
           //double phase_ini = - angle * alpha;
           outFile << " " << phase_ini;
 
