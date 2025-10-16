@@ -1398,20 +1398,15 @@
     // 6 = 1/2-comet
 
     // determine the number of rows and columns
-    int row_tot = 0;
-    int column_tot = 0;
-    for (int i = 2; i <= sqrt(N)+1; i = i + 2){
-      if (N % i == 0){
-
-          row_tot = i;
-          column_tot = N/i;
-
-      }
+    int dim_true = 0;
+    while (pow(dim_true, 2) < N) {
+      dim_true = dim_true + 1;
     }
-    double spacing = disc_r/sqrt(pow(row_tot-1,2) + pow(column_tot-1,2));
-    double length_row = spacing * (row_tot - 1);
-    double length_column = spacing * (column_tot - 1);
-    
+
+    double disc_d = disc_r * 2;
+    double spacing = disc_d/(sqrt(2) * dim_true);
+    double length_side = spacing * (dim_true - 1);
+
     // set up the initial phase (synchronized beating)
     std::string filePath = SIMULATION_ICSTATE_NAME;
     std::ofstream outFile(filePath);
@@ -1420,18 +1415,18 @@
     // set up the root position and orientation
     int n = 0;
     srand (time (0));
-    for (int i = 0; i < row_tot; i++){
+    for (int i = 0; i < dim_true; i++){
 
-      for (int j = 0; j < column_tot; j++){
+      for (int j = 0; j < dim_true; j++){
         //outFile << " " << 0;
         //outFile << " " << final_state[n+2];
-        pos_ref[3*n] = i * spacing - length_row/2;
-        pos_ref[3*n + 1] = j * spacing - length_column/2;
+        pos_ref[3*n] = i * spacing - length_side/2;
+        pos_ref[3*n + 1] = j * spacing - length_side/2;
         pos_ref[3*n + 2] = 0;
         //const Real theta = 0.001;
         const Real theta = 0.001;
         //double angle = std:: atan2(pos_ref[3*n + 1],pos_ref[3*n]) + atan(1) * 4 * (pos_ref[3*n]<0);
-        double angle_tilt = atan(1) / 3 * 4;
+        double angle_tilt = atan(1) / 3 * 1;
         double angle = std:: atan2(pos_ref[3*n + 1],pos_ref[3*n]) + 2 * PI * (pos_ref[3*n + 1] < 0) ;//* (pos_ref[3*n]>0) + atan2(-pos_ref[3*n + 1],-pos_ref[3*n]) * (pos_ref[3*n]<0);
         //double phase_ini = -angle * 2;
 
@@ -1516,20 +1511,27 @@
     // determine the number of rows and columns
     int row_tot = 0;
     int column_tot = 0;
-    for (int i = 1; i <= sqrt(N/12); i = i + 1){
+    double length_row = 2.5;
+    double length_column = 16;
+    int Tol = 5;
+    for (int i = 1; i <= sqrt(N/2); i = i + 1){
       if ((N - i - 1) % (2 * i + 1) == 0){
 
           column_tot = i;
           row_tot = (N - i - 1) / (2 * i + 1);
-
+          if (abs(column_tot * length_column - row_tot * length_row) < Tol){
+              break;
+          }
       }
+
     }
     
-    double spacing = disc_r/sqrt(pow(row_tot+1,2) + pow(column_tot+1,2));
-    double length_row = 2.5;
-    double length_column = 16;
+    double disc_d = disc_r * 2;
+    double spacing = disc_d/sqrt(pow(row_tot+1,2) + pow(column_tot+1,2));
     int cilia_tot = row_tot * column_tot + (row_tot + 1) * (column_tot + 1);
     double phase[cilia_tot];
+    double x_shift = (0.5 * column_tot + 1) *length_column;
+    double y_shift = (0.5 * row_tot + 0.5) * length_row;
 
     // set up the root position, orientation and initial phase (for sake of the MCW)
     std::string filePath = SIMULATION_ICSTATE_NAME;
@@ -1548,8 +1550,8 @@
 
       for (int j = 0; j < column; j++){
 
-        pos_ref[3*n] = (j + 1 + (column == column_tot) * 0.5) * length_column;
-        pos_ref[3*n + 1] = (i + 1) * length_row;
+        pos_ref[3*n] = (j + 1 + (column == column_tot) * 0.5) * length_column - x_shift;
+        pos_ref[3*n + 1] = (i + 1) * length_row * 0.5 - y_shift;
         pos_ref[3*n + 2] = 0;
 
         phase[n] = i * atan(1) * 8 / (2*row_tot);
@@ -1587,7 +1589,7 @@
 
   void defective_seeding(Real *const pos_ref, Real *const polar_dir_refs, Real *const azi_dir_refs, Real *const normal_refs, const int N, shape_fourier_description& shape, Real disc_r){
     
-    int CHOICE_OF_CONTOUR = 4;
+    int CHOICE_OF_CONTOUR = 1;
     // Valid options:
     // 0 = source
     // 1 = sink
@@ -1612,9 +1614,9 @@
     double length_side = spacing * (dim_true - 1);
     
     // set up the initial phase (synchronized beating)
-    std::string filePath = SIMULATION_ICSTATE_NAME;
-    std::ofstream outFile(filePath);
-    outFile << 0.005 << " " << 1;
+    //std::string filePath = SIMULATION_ICSTATE_NAME;
+    //std::ofstream outFile(filePath);
+    //outFile << 0.005 << " " << 1;
 
     // set up the root position and orientation
     int n = 0;
@@ -1632,7 +1634,7 @@
           //const Real theta = 0.001;
           const Real theta = 0.001;
           //double angle = std:: atan2(pos_ref[3*n + 1],pos_ref[3*n]) + atan(1) * 4 * (pos_ref[3*n]<0);
-          double angle_tilt = atan(1) / 2 * 5;
+          double angle_tilt = atan(1) / 3 * 3;
           double angle = std:: atan2(pos_ref[3*n + 1],pos_ref[3*n]) + 2 * PI * (pos_ref[3*n + 1] < 0) ;//* (pos_ref[3*n]>0) + atan2(-pos_ref[3*n + 1],-pos_ref[3*n]) * (pos_ref[3*n]<0);
           //double phase_ini = -angle * 2;
 
@@ -1649,7 +1651,7 @@
           double alpha = 2;
           //phase_ini = 0;
           //double phase_ini = - angle * alpha;
-          outFile << " " << phase_ini;
+          //outFile << " " << phase_ini;
 
           double beating_orientation[2];
           switch (CHOICE_OF_CONTOUR) {
@@ -1707,10 +1709,10 @@
     }
 
     for (int n = 0; n < N; n++){
-      outFile << " " << 0;
+      //outFile << " " << 0;
     }
 
-    outFile.close();
+    //outFile.close();
 
   }
 
@@ -1921,6 +1923,24 @@
         // hexagonal_seeding(blob_references, polar_dir_refs, azi_dir_refs, normal_refs, NBLOB, shape, blob_step_x, blob_grid_dim_x, hex_num, rev_ratio);
         hexagonal_seeding(blob_references, polar_dir_refs, azi_dir_refs, normal_refs, NBLOB, shape, BLOB_SPACING, BLOB_X_DIM, HEX_NUM, REV_RATIO);
       
+      #elif CONTOUR_SEEDING
+        Real disc_radius = BLOB_SPACING*my_sqrt(NBLOB);
+        // std::ifstream in("separation.dat"); // using the 6th number as input
+        // for (int di=0; di<6; di++){
+        //   in >> disc_radius;
+        // }
+        std::cout << "Seeking an centric placement for the blobs..." << std::endl;
+        equal_area_seeding_centric(blob_references, polar_dir_refs, azi_dir_refs, normal_refs, NBLOB, shape, disc_radius, 0.0);
+
+      #elif MCC_SEEDING
+        Real disc_radius = BLOB_SPACING*my_sqrt(NBLOB);
+        // std::ifstream in("separation.dat"); // using the 6th number as input
+        // for (int di=0; di<6; di++){
+        //   in >> disc_radius;
+        // }
+        std::cout << "Seeking an centric placement for the blobs..." << std::endl;
+        equal_area_seeding_centric(blob_references, polar_dir_refs, azi_dir_refs, normal_refs, NBLOB, shape, disc_radius, 0.0);
+        
       #elif DEFECTIVE_SEEDING
         Real disc_radius = BLOB_SPACING*my_sqrt(NBLOB);
         // std::ifstream in("separation.dat"); // using the 6th number as input
@@ -2112,8 +2132,7 @@
 
       std::cout << "Seeding and orientation defined by a family of contours..." << std::endl;
 
-      //disc_radius = FIL_SPACING*my_sqrt(NFIL);
-      double disc_radius = 3.90625 * 8 * BLOB_SPACING * my_sqrt(NBLOB);
+      double disc_radius = FIL_SPACING*my_sqrt(NFIL);
       contour_seeding(filament_references, polar_dir_refs, azi_dir_refs, normal_refs, NFIL, shape,disc_radius);
 
     #elif MCC_SEEDING
@@ -2121,15 +2140,14 @@
       std::cout << "MCC seeding with metachronal wave perpendicular to beating orientation..." << std::endl;
 
       //disc_radius = FIL_SPACING*my_sqrt(NFIL);
-      double disc_radius = 6.25 * BLOB_SPACING * my_sqrt(NBLOB);
+      double disc_radius = BLOB_SPACING * my_sqrt(NBLOB);
       mcc_seeding(filament_references, polar_dir_refs, azi_dir_refs, normal_refs, NFIL, shape,disc_radius);
 
     #elif DEFECTIVE_SEEDING
 
       std::cout << "square-formation seeding with a small defect of square patch..." << std::endl;
-
-      double disc_radius = FIL_SPACING*my_sqrt(NFIL);
-      //double disc_radius = 6.25 * BLOB_SPACING * my_sqrt(NBLOB);
+      double NFIL_FILLED = floor(sqrt(NFIL)) * floor(sqrt(NFIL));
+      double disc_radius = FIL_SPACING*my_sqrt(NFIL_FILLED);
       defective_seeding(filament_references, polar_dir_refs, azi_dir_refs, normal_refs, NFIL, shape,disc_radius);
       
     #endif

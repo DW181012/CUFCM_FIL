@@ -1,4 +1,5 @@
 {
     "python.analysis.typeCheckingMode": "basic",
-    "MATLAB.installPath": "C:\\Program Files\\MATLAB\\R2022b"
+    "MATLAB.installPath": "C:\\Program Files\\MATLAB\\R2022b",
+    "makefile.configureOnOpen": false
 }
