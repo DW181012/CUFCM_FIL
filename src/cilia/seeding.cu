@@ -1387,7 +1387,7 @@
 
   void contour_seeding(Real *const pos_ref, Real *const polar_dir_refs, Real *const azi_dir_refs, Real *const normal_refs, const int N, shape_fourier_description& shape, Real disc_r){
     
-    int CHOICE_OF_CONTOUR = 0;
+    int CHOICE_OF_CONTOUR = 1;
     // Valid options:
     // 0 = source
     // 1 = sink
@@ -1408,9 +1408,9 @@
     double length_side = spacing * (dim_true - 1);
 
     // set up the initial phase (synchronized beating)
-    std::string filePath = SIMULATION_ICSTATE_NAME;
-    std::ofstream outFile(filePath);
-    outFile << 0.005 << " " << 1;
+    //std::string filePath = SIMULATION_ICSTATE_NAME;
+    //std::ofstream outFile(filePath);
+    //outFile << 0.005 << " " << 1;
 
     // set up the root position and orientation
     int n = 0;
@@ -1442,7 +1442,7 @@
         //double phase_ini = (double(rand() % 10000)/10000) * 2 * PI;
         double alpha = 2;
         //double phase_ini = - angle * alpha;
-        outFile << " " << phase_ini;
+        //outFile << " " << phase_ini;
 
         double beating_orientation[2];
         switch (CHOICE_OF_CONTOUR) {
@@ -1499,10 +1499,10 @@
     }
 
     for (int n = 0; n < N; n++){
-      outFile << " " << 0;
+      //outFile << " " << 0;
     }
 
-    outFile.close();
+    //outFile.close();
 
   }
 
@@ -1589,7 +1589,7 @@
 
   void defective_seeding(Real *const pos_ref, Real *const polar_dir_refs, Real *const azi_dir_refs, Real *const normal_refs, const int N, shape_fourier_description& shape, Real disc_r){
     
-    int CHOICE_OF_CONTOUR = 1;
+    int CHOICE_OF_CONTOUR = 0;
     // Valid options:
     // 0 = source
     // 1 = sink
