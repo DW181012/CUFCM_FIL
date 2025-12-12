@@ -82,7 +82,7 @@ class DRIVER:
 
         self.category = 'pizza_sim/'
         self.exe_name = 'cilia_1e-4_pizza'
-        self.date = '20251105_defective_terminal_ini_180_random_phase_01_5m1'
+        self.date = '20250825_defective_60_random_phase_20'
         self.dir = f"data/{self.category}{self.date}{self.afix}/"
         
 
@@ -192,8 +192,8 @@ class DRIVER:
                         nseg = 20
                         ar = round(1, 2)
                         period = 1
-                        #spring_factor = round(0.5, 3)
-                        spring_factor = int(self.date[-3]) * (10 ** (-int(self.date[-1])))
+                        spring_factor = round(0.05, 3)
+                        #spring_factor = int(self.date[-3]) * (10 ** (-int(self.date[-1])))
                         nx=int(128)
                         ny=int(128)
                         nz=int(128)
@@ -204,7 +204,7 @@ class DRIVER:
                         blob_x_dim=10
                         hex_num=2
                         reverse_fil_direction_ratio=0.0
-                        sim_length = 200
+                        sim_length = 300
                         force_noise_mag = 0.0
                         omega_spread = 0.0
                         pair_dp = 1.0

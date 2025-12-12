@@ -1589,7 +1589,7 @@
 
   void defective_seeding(Real *const pos_ref, Real *const polar_dir_refs, Real *const azi_dir_refs, Real *const normal_refs, const int N, shape_fourier_description& shape, Real disc_r){
     
-    int CHOICE_OF_CONTOUR = 0;
+    int CHOICE_OF_CONTOUR = 4;
     // Valid options:
     // 0 = source
     // 1 = sink
@@ -1634,7 +1634,7 @@
           //const Real theta = 0.001;
           const Real theta = 0.001;
           //double angle = std:: atan2(pos_ref[3*n + 1],pos_ref[3*n]) + atan(1) * 4 * (pos_ref[3*n]<0);
-          double angle_tilt = atan(1) / 3 * 3;
+          double angle_tilt = atan(1) / 3 * 2;
           double angle = std:: atan2(pos_ref[3*n + 1],pos_ref[3*n]) + 2 * PI * (pos_ref[3*n + 1] < 0) ;//* (pos_ref[3*n]>0) + atan2(-pos_ref[3*n + 1],-pos_ref[3*n]) * (pos_ref[3*n]<0);
           //double phase_ini = -angle * 2;
 
@@ -1713,6 +1713,38 @@
     }
 
     //outFile.close();
+
+  }
+
+  void single_seeding(Real *const pos_ref, Real *const polar_dir_refs, Real *const azi_dir_refs, Real *const normal_refs, const int N, shape_fourier_description& shape, Real disc_r){
+    
+    std::string filePath = SIMULATION_ICSTATE_NAME;
+    std::ofstream outFile(filePath);
+    outFile << 0.05 << " " << 1 << " " << 0 << " " << 0;
+    outFile.close();
+
+    // set up the root position and orientation
+    int n = 0;
+    pos_ref[3*n] = 0;
+    pos_ref[3*n + 1] = 0;
+    pos_ref[3*n + 2] = 0;
+
+    const Real theta = 0.000000000001;
+    const Real phi = 0;
+
+    matrix frame = shape.full_frame(theta, phi);
+
+    polar_dir_refs[3*n] = frame(0);
+    polar_dir_refs[3*n + 1] = frame(1);
+    polar_dir_refs[3*n + 2] = frame(2);
+
+    azi_dir_refs[3*n] = frame(3);
+    azi_dir_refs[3*n + 1] = frame(4);
+    azi_dir_refs[3*n + 2] = frame(5);
+
+    normal_refs[3*n] = frame(6);
+    normal_refs[3*n + 1] = frame(7);
+    normal_refs[3*n + 2] = frame(8);
 
   }
 
@@ -1950,6 +1982,15 @@
         std::cout << "Seeking an centric placement for the blobs..." << std::endl;
         equal_area_seeding_centric(blob_references, polar_dir_refs, azi_dir_refs, normal_refs, NBLOB, shape, disc_radius, 0.0);
 
+      #elif SINGLE_SEEDING
+        Real disc_radius = BLOB_SPACING*my_sqrt(NBLOB);
+        // std::ifstream in("separation.dat"); // using the 6th number as input
+        // for (int di=0; di<6; di++){
+        //   in >> disc_radius;
+        // }
+        std::cout << "Seeking an centric placement for the blobs..." << std::endl;
+        equal_area_seeding_centric(blob_references, polar_dir_refs, azi_dir_refs, normal_refs, NBLOB, shape, disc_radius, 0.0);
+
       #elif CENTRIC_WALL_SEEDING
         Real disc_radius = BLOB_SPACING*my_sqrt(NBLOB);
         // std::ifstream in("separation.dat"); // using the 6th number as input
@@ -2149,6 +2190,12 @@
       double NFIL_FILLED = floor(sqrt(NFIL)) * floor(sqrt(NFIL));
       double disc_radius = FIL_SPACING*my_sqrt(NFIL_FILLED);
       defective_seeding(filament_references, polar_dir_refs, azi_dir_refs, normal_refs, NFIL, shape,disc_radius);
+    
+    #elif SINGLE_SEEDING
+
+      std::cout << "seeding with a single cilium..." << std::endl;
+      double disc_radius = 80;
+      single_seeding(filament_references, polar_dir_refs, azi_dir_refs, normal_refs, NFIL, shape,disc_radius);  
       
     #endif
 

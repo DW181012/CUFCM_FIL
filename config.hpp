@@ -217,6 +217,7 @@ extern std::string CUFCM_CONFIG_FILE_NAME;
   //10 = Seeding and orientation defined by a family of contours
   //11 = MCC seeding with metachronal wave perpendicular to beating orientation
   //12 = Defective seeding. A square formation with a defective patch in the center.
+  //13 = Single cilium seeding.
 
   #if BODY_OR_SURFACE_TYPE==5
     #define FOURIER_DIR "input/rigidwall_seeding/"
@@ -539,6 +540,7 @@ extern Real REV_RATIO;
   #define CONTOUR_SEEDING (SEEDING_TYPE==10)
   #define MCC_SEEDING (SEEDING_TYPE==11)
   #define DEFECTIVE_SEEDING (SEEDING_TYPE==12)
+  #define SINGLE_SEEDING (SEEDING_TYPE==13)
 
 #endif
 
