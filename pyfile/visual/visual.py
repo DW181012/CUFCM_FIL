@@ -118,7 +118,7 @@ class VISUAL:
         self.date = '20250311_flowfield_sym'
         self.dir = f"data/for_paper/flowfield_example/{self.date}/"
 
-        self.date = '20251125_defective_0_random_phase_01'
+        self.date = '20260125_mcc'
         self.dir = f"data/pizza_sim/{self.date}/"
         
 
