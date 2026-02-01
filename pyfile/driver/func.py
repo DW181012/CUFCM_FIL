@@ -82,7 +82,7 @@ class DRIVER:
 
         self.category = 'pizza_sim/'
         self.exe_name = 'cilia_1e-4_pizza'
-        self.date = '20260125_mcc'
+        self.date = '20260205_mcc'
         self.dir = f"data/{self.category}{self.date}{self.afix}/"
         
 
@@ -187,7 +187,7 @@ class DRIVER:
                         reverse_fil_direction_ratio=0.0
 
                         # # planar triangle
-                        nfil = int(358)
+                        nfil = int(98450)
                         nblob = int(900)
                         nseg = 20
                         ar = round(1, 2)

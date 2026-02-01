@@ -1727,9 +1727,10 @@
     
     // generate a sequence of index pointing to the central position of the patch
     std::vector<int> patch_pos(N_patch_size);
-    for (int i = 0; i < N_patch_size; i++)
-        patch_pos[i] = i + 1;
-
+    for (int i = 0; i < N_patch_size; i++){
+        patch_pos[i] = i;
+    }
+    
     std::random_device rd1;
     std::mt19937 gen1(rd1());
     std::shuffle(patch_pos.begin(), patch_pos.end(), gen1);
@@ -1776,10 +1777,10 @@
     // double in [0, 1). Each call to dis(gen) generates a new random double.
     
     for (int patch_index = 0; patch_index < N_patch; patch_index++){
-      int row_patch = ceil(patch_pos[patch_index] / N_patch_side);
-      int column_patch = ((patch_pos[patch_index] - 1) % N_patch_side) + 1;
-      double patch_center_x = patch_spacing * (column_patch - (N_patch_side / 2) - 0.5);
-      double patch_center_y = patch_spacing * (-row_patch + (N_patch_side / 2) + 0.5);
+      int row_patch = floor(patch_pos[patch_index] / N_patch_side);
+      int column_patch = patch_pos[patch_index] % N_patch_side;
+      double patch_center_x = patch_spacing * (column_patch - (N_patch_side / 2) + 0.5);
+      double patch_center_y = patch_spacing * (row_patch - (N_patch_side / 2) + 0.5);
       patch_phase[patch_index] = dis2(gen2) * 2 * PI;
 
       do {
